@@ -1,3 +1,7 @@
+#### Inspirational Projects
+
+[Fast Base64 stream encoder/decoder](https://github.com/aklomp/base64)
+
 #### Building the application
 
 ```shell
