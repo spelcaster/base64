@@ -1,10 +1,11 @@
-// Copyright 2016 <https://hitgub.com/spelcaster>
+// Copyright 2016 <https://github.com/spelcaster>
 
 #ifndef __DCW_BASE_64_H__
 #define __DCW_BASE_64_H__
 
 #include <string>
 #include <vector>
+#include <sstream>
 
 //! Base64
 /*!
@@ -15,50 +16,20 @@ class Base64 {
     /*!
      * The base 64 alphabet
      */
-    std::string map_;
+    std::string character_set_;
 
     /*!
-     * This matrix is the number of chunks of 24 bits the text have, those
-     * chunks will be converted using the base64 alphabet
+     * @brief Recursively search for character in the chacter set
+     *
+     * @param[in] it        The character set iterator
+     * @param[in] character The letter that we're looking for
+     *
+     * @throw CharacterNotFoundException If the character is not present
+     *                                   in character set
+     *
+     * @returns The index of the given letter
      */
-    std::vector< std::vector<int> > chunks_;
-
-    /*!
-     * @brief This method appends a chunk of 24 bits to the chunks matrix
-     *
-     * @param[in] chunk The chunk of 24 bits being added
-     */
-    void appendChunk(std::vector<int> chunk);
-
-    /*!
-     * @brief This will recursively iterate through chunks encoding them
-     *
-     * @param[in]  it          An reverse iterator to walk along the chunks
-     *                         array
-     * @param[out] encoded_str The resultant string
-     *
-     * @returns The resultant string
-     */
-    std::string encodeChunks(
-        std::vector< std::vector< int > >::reverse_iterator it,
-        std::string encoded_str
-    );
-
-    /*!
-     * @brief This will recursively iterate through a chunk and encode the
-     *        chunk, each chunk generates 4 elements in base64 encoding
-     *
-     * @param[in]  &chunk The chunk being encoded
-     * @param[in]  it     The chunk iterator
-     * @param[out] str    The resultant string
-     *
-     * @returns The resultant string
-     */
-    std::string encodeChunk(
-       const std::vector< int > &chunk,
-       std::vector< int >::iterator it,
-       std::string str
-    );
+    int getIndexOfRecursively(std::string::iterator it, const char character);
 
  public:
     //! Base64 constructor
@@ -68,18 +39,24 @@ class Base64 {
     ~Base64();
 
     /*!
-     * @brief Encode a string into base64
+     * @brief Get the index of an entry in the character set
      *
-     * @param[in] text The text that will be encoded
+     * @param[in] character The letter that we want to know the index
      *
-     * @returns The text encoded into base64
+     * @returns The index of the letter
      */
-    std::string encode(std::string text);
+    int getIndexOf(const char character);
 
     /*!
-     * @todo Implement the base64 decoder
+     * @brief Get the character in a given index
+     *
+     * @param[in] index The index of the character
+     *
+     * @throw OutOfBoundsException If index is not a valid key
+     *
+     * @returns The character in the given index
      */
-    std::string decode(std::string text);
+    char getCharacterAt(const int index);
 };
 
 #endif // __DCW_BASE_64_H__
